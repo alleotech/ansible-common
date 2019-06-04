@@ -3,7 +3,16 @@
   command: sed -i 's/^.*ssh-rsa/ssh-rsa/g' /root/.ssh/authorized_keys
 
 - name: Adjust cloud-init
-  command: "sed -i -- 's/disable_root: 1/disable_root: 0\nhostname: {{ hostname }}\nfqdn: {{ hostname }}/' /etc/cloud/cloud.cfg"
+  lineinfile:
+    path: /etc/cloud/cloud.cfg
+    state: present
+    regexp: "^{{ item.key }}:"
+    line: "{{ item.key }}: {{ item.value }}"
+    insertafter: "^disable_root:"
+  with_dict:
+    disable_root: 1
+    hostname: "{{ hostname }}"
+    fqdn: "{{ hostname }}"
   when: hostname is defined
 
 - name: Adjust hostname
