@@ -1,0 +1,38 @@
+- name: Check params
+  fail:
+    msg: "[volume] and [mount] params are required"
+  when:
+    - volume is undefined
+    - mount is undefined
+
+- set_fact:
+    partition: "{{ volume }}p1"
+  when: volume is search("nvme")
+
+- set_fact:
+    partition: "{{ volume }}1"
+  when: volume is not search("nvme")
+
+- name: "Partition [{{ volume }}]"
+  parted:
+    device: "{{ volume }}"
+    number: 1
+    state: present
+
+- name: "Ensure filesystem exists [{{ partition }}]"
+  filesystem:
+    dev: "{{ partition }}"
+    fstype: ext4
+
+- name: "Ensure mount point exists [{{ mount }}]"
+  file:
+    path: "{{ mount }}"
+    state: directory
+    recurse: yes
+
+- name: "Ensume volume is mounted [{{ partition }}]"
+  mount:
+    path: "{{ mount }}"
+    src: "{{ partition }}"
+    fstype: ext4
+    state: mounted
