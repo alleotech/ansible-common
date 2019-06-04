@@ -1,6 +1,7 @@
 ---
 - name: Configure the system
-  hosts: all
+  hosts: 127.0.0.1
+  connection: local
   tasks:
     - include_role: 
         name: alleotech.system
