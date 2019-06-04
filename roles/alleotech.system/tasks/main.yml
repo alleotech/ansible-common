@@ -1,0 +1,9 @@
+---
+- name: Disable SELinux
+  include_tasks: selinux.yml
+
+- name: Make swapfile
+  include_tasks: swapfile.yml
+
+- name: Install tools
+  include_tasks: tools.yml

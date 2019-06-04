@@ -1,0 +1,6 @@
+---
+- name: Configure the system
+  hosts: all
+  tasks:
+    - include_role: 
+        name: alleotech.system

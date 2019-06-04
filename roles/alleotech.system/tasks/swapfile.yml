@@ -1,0 +1,30 @@
+- name: Ensure Swapfile exists
+  stat:
+     path: "{{ swapfile_path }}"
+     get_checksum: false
+     get_md5: false
+     get_mime: false
+  register: state_swapfile
+
+- block:
+
+  - name: Write swapfile
+    command: "dd if=/dev/zero of={{ swapfile_path }} bs=1M count={{ swapfile_size }}"
+
+  - name: Set swapfile permissions
+    file:
+      path: "{{ swapfile_path }}"
+      mode: 0600
+      owner: root
+      group: root
+
+  - name: Create swapfile
+    command: "mkswap {{ swapfile_path }}"
+
+  - name: Add swapfile to fstab
+    lineinfile:
+      dest: /etc/fstab
+      line: "{{ swapfile_path }}  swap    swap    defaults  0   0"
+      state: present
+
+  when: not state_swapfile.stat.exists

@@ -1,0 +1,35 @@
+---
+selinux_reboot_allowed: false
+
+swapfile_path: /swapfile
+swapfile_size: 1024
+
+epel_repo_url: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+epel_repo_path: /etc/yum.repos.d/epel.repo
+
+tools:
+  - ack
+  - ansible
+  - bash-completion
+  - bind-utils
+  - ctags
+  - git
+  - grep
+  - htop
+  - links
+  - mc
+  - mtr
+  - mutt
+  - mysql
+  - screen
+  - strace
+  - sudo
+  - sysstat
+  - tcpdump
+  - telnet
+  - tig
+  - tree
+  - unzip
+  - vim-enhanced
+  - wget
+  - zip

@@ -1,0 +1,18 @@
+- name: Check if EPEL repo installed
+  stat:
+    path: "{{ epel_repo_path }}"
+    get_checksum: false
+    get_md5: false
+    get_mime: false
+  register: state_epel
+
+- name: Install EPEL repo
+  yum:
+    name: "{{ epel_repo_url }}"
+  when: not state_epel.stat.exists
+  
+- name: Install common tools
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ tools }}"

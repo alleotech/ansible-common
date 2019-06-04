@@ -1,0 +1,31 @@
+- block:
+
+  - name: Disable SELinux
+    selinux:
+      state: disabled
+    register: state_selinux
+
+  - block:
+  
+    - pause:
+        prompt: Should we reboot? Press 'y' to allow
+        seconds: 30
+      register: state_user_prompt
+      when: not selinux_reboot_allowed
+
+    - name: Reboot the system
+      shell: sleep 2 && shutdown -r now "Ansible triggered reboot"
+      async: 1
+      poll: 0
+      ignore_errors: true
+      when: selinux_reboot_allowed or (state_user_prompt and state_user_prompt.user_input == 'y')
+
+    - name: Wait for system to come back
+      wait_for_connection:
+        delay: 15
+        timeout: 300
+      when: selinux_reboot_allowed or (state_user_prompt and state_user_prompt.user_input == 'y')
+
+    when: state_selinux.changed
+
+  when: ansible_selinux.status != 'disabled'
