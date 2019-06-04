@@ -9,7 +9,7 @@
   
     - pause:
         prompt: Should we reboot? Press 'y' to allow
-        seconds: 30
+        seconds: 15
       register: state_user_prompt
       when: not selinux_reboot_allowed
 

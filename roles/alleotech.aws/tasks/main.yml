@@ -1,0 +1,12 @@
+---
+- name: Enable root SSH access
+  command: sed -i 's/^.*ssh-rsa/ssh-rsa/g' /root/.ssh/authorized_keys
+
+- name: Adjust cloud-init
+  command: "sed -i -- 's/disable_root: 1/disable_root: 0\nhostname: {{ hostname }}\nfqdn: {{ hostname }}/' /etc/cloud/cloud.cfg"
+  when: hostname is defined
+
+- name: Adjust hostname
+  hostname:
+    name: "{{ hostname }}"
+  when: hostname is defined

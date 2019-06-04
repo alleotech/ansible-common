@@ -5,3 +5,5 @@
   tasks:
     - include_role: 
         name: alleotech.system
+    - include_role:
+        name: alleotech.aws
