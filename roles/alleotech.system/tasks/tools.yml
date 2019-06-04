@@ -13,6 +13,5 @@
   
 - name: Install common tools
   yum:
-    name: "{{ item }}"
-    state: latest
-  with_items: "{{ tools }}"
+    name: "{{ tools }}"
+    state: present
